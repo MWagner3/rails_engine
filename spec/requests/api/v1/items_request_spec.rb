@@ -70,5 +70,17 @@ describe "Items API" do
     expect(Item.count).to eq(0)
   end
 
-  
+  it 'can update an item' do
+
+    merchant = create(:merchant)
+    item = create(:item, name: 'old thing', merchant_id: merchant.id)
+    id = item.id
+
+    put "/api/v1/items/#{id}", params: {name: 'new thing'}
+    expect(response).to be_successful
+    expect(Item.last.name).to eq('new thing')
+
+    # item.name still returns old thing??
+  end
+
 end
