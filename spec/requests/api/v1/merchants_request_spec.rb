@@ -59,4 +59,28 @@ describe "Merchants API" do
       expect(item[:attributes][:merchant_id]).to eq(merchant_1.id)
     end
   end
+
+  it 'find merchant based on search' do
+    merchant = Merchant.create!(name: "Test Guy")
+    merchant = Merchant.create!(name: "Test Man")
+    merchant = Merchant.create!(name: "Test Fellow")
+    merchant = Merchant.create!(name: "Test Chum")
+
+    get "/api/v1/merchants/find?name=Guy"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(merchant[:data][:attributes]).to have_key(:name)
+    expect(merchant[:data][:attributes][:name]).to eq("Test Guy")
+
+    get "/api/v1/merchants/find?name=Lad"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+    
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+    expect(merchant[:data][:message]).to eq("Merchant not found")
+  end
 end
