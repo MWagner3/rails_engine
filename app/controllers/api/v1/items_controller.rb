@@ -26,6 +26,11 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
+  def find_all
+    items = Item.where("name ILIKE ?", "%#{params[:name]}%")
+    render json: ItemSerializer.new(items)
+  end
+
 
   private
 
