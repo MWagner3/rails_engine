@@ -6,10 +6,16 @@ Rails.application.routes.draw do
       get '/items/find_all', to: 'items#find_all'
       get '/merchants/find', to: 'merchants#find'
       resources :merchants, only: [:index, :show] do
+        # get :most_items, to: 'merchants#most_items'
+        get :most_items, on: :collection, controller: :merchants
         resources :items, controller: 'merchant_items', action: :index
       end
       resources :items do
         resources :merchant, controller: 'merchant_items', action: :show
+      end
+      namespace :revenue do
+        resources :merchants, only: [:index, :show]
+        resources :items, only: [:index]
       end
     end
   end
