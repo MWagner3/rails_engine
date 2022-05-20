@@ -11,7 +11,7 @@ class Api::V1::MerchantsController < ApplicationController
   def find
     merchant = Merchant.where("name ILIKE ?", "%#{params[:name]}%").first
     if merchant.nil?
-      render json: { data: { message: 'Merchant not found' } }, status: 400
+      render json: { data: { message: 'Merchant not found' } }, status: 404
     else
       render json: MerchantSerializer.new(merchant)
     end
