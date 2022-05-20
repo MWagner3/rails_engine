@@ -79,7 +79,7 @@ describe "Merchants API" do
 
     merchant = JSON.parse(response.body, symbolize_names: true)
 
-    expect(response.status).to eq(400)
+    expect(response.status).to eq(404)
     expect(merchant[:data][:message]).to eq("Merchant not found")
   end
 end
