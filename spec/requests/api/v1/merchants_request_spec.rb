@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-describe "Merchants API" do
-  it "sends a list of merchants" do
+describe 'Merchants API' do
+  it 'sends a list of merchants' do
     create_list(:merchant, 3)
 
     get '/api/v1/merchants'
@@ -13,7 +15,6 @@ describe "Merchants API" do
     expect(merchants[:data].count).to eq(3)
 
     merchants[:data].each do |merchant|
-
       expect(merchant).to have_key(:id)
       expect(merchant[:id]).to be_a(String)
 
@@ -22,7 +23,7 @@ describe "Merchants API" do
     end
   end
 
-  it "can get one merchant by its id" do
+  it 'can get one merchant by its id' do
     id = create(:merchant).id
 
     get "/api/v1/merchants/#{id}"
@@ -61,25 +62,25 @@ describe "Merchants API" do
   end
 
   it 'find merchant based on search' do
-    merchant = Merchant.create!(name: "Test Guy")
-    merchant = Merchant.create!(name: "Test Man")
-    merchant = Merchant.create!(name: "Test Fellow")
-    merchant = Merchant.create!(name: "Test Chum")
+    merchant = Merchant.create!(name: 'Test Guy')
+    merchant = Merchant.create!(name: 'Test Man')
+    merchant = Merchant.create!(name: 'Test Fellow')
+    merchant = Merchant.create!(name: 'Test Chum')
 
-    get "/api/v1/merchants/find?name=Guy"
+    get '/api/v1/merchants/find?name=Guy'
 
     merchant = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
     expect(response.status).to eq(200)
     expect(merchant[:data][:attributes]).to have_key(:name)
-    expect(merchant[:data][:attributes][:name]).to eq("Test Guy")
+    expect(merchant[:data][:attributes][:name]).to eq('Test Guy')
 
-    get "/api/v1/merchants/find?name=Lad"
+    get '/api/v1/merchants/find?name=Lad'
 
     merchant = JSON.parse(response.body, symbolize_names: true)
 
     expect(response.status).to eq(404)
-    expect(merchant[:data][:message]).to eq("Merchant not found")
+    expect(merchant[:data][:message]).to eq('Merchant not found')
   end
 end

@@ -1,9 +1,8 @@
+# frozen_string_literal: true
+
 class ItemsSoldSerializer
   include JSONAPI::Serializer
   attributes :name
 
-  attribute :count do |object|
-    object.total_item_sold
-  end
-
+  attribute :count, &:total_item_sold
 end

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-describe "Items API" do
-  it "sends a list of items" do
+describe 'Items API' do
+  it 'sends a list of items' do
     merchant = create(:merchant)
     create_list(:item, 3, merchant_id: merchant.id)
 
@@ -22,7 +24,7 @@ describe "Items API" do
     end
   end
 
-  it "finds an item by ID" do
+  it 'finds an item by ID' do
     merchant = create(:merchant)
     item     = create(:item, merchant_id: merchant.id)
     id       = item.id
@@ -39,14 +41,13 @@ describe "Items API" do
     expect(item[:attributes]).to have_key(:unit_price)
     expect(item[:attributes]).to have_key(:merchant_id)
     expect(item[:attributes][:merchant_id]).to eq(merchant.id)
-
   end
 
   it 'can create a new item' do
     merchant    = create(:merchant)
-    item_params = { name: 'Thing 1', unit_price: 5, description: 'the first thing', merchant_id: merchant.id}
+    item_params = { name: 'Thing 1', unit_price: 5, description: 'the first thing', merchant_id: merchant.id }
 
-    post "/api/v1/items", params: item_params
+    post '/api/v1/items', params: item_params
     expect(response).to be_successful
 
     item = Item.last
@@ -71,12 +72,11 @@ describe "Items API" do
   end
 
   it 'can update an item' do
-
     merchant = create(:merchant)
     item     = create(:item, name: 'old thing', merchant_id: merchant.id)
     id       = item.id
 
-    put "/api/v1/items/#{id}", params: {name: 'new thing'}
+    put "/api/v1/items/#{id}", params: { name: 'new thing' }
     expect(response).to be_successful
     expect(Item.last.name).to eq('new thing')
 
@@ -84,7 +84,6 @@ describe "Items API" do
   end
 
   it 'can return merchant data of an item' do
-
     merchant_1 = create(:merchant)
     merchant_2 = create(:merchant)
     item       = create(:item, merchant_id: merchant_1.id)
@@ -101,13 +100,13 @@ describe "Items API" do
   end
 
   it 'find all items based on search' do
-    merchant = Merchant.create!(name: "Test Guy")
-    item_1 = Item.create!(name: "Red thing", description: "very red", unit_price: 1, merchant_id: merchant.id)
-    item_2 = Item.create!(name: "Red object", description: "a bit red", unit_price: 2, merchant_id: merchant.id)
-    item_3 = Item.create!(name: "Blue thing", description: "very blue", unit_price: 3, merchant_id: merchant.id)
-    item_4 = Item.create!(name: "Blue object", description: "a bit blue", unit_price: 4, merchant_id: merchant.id)
+    merchant = Merchant.create!(name: 'Test Guy')
+    item_1 = Item.create!(name: 'Red thing', description: 'very red', unit_price: 1, merchant_id: merchant.id)
+    item_2 = Item.create!(name: 'Red object', description: 'a bit red', unit_price: 2, merchant_id: merchant.id)
+    item_3 = Item.create!(name: 'Blue thing', description: 'very blue', unit_price: 3, merchant_id: merchant.id)
+    item_4 = Item.create!(name: 'Blue object', description: 'a bit blue', unit_price: 4, merchant_id: merchant.id)
 
-    get "/api/v1/items/find_all?name=Red"
+    get '/api/v1/items/find_all?name=Red'
 
     parsed = JSON.parse(response.body, symbolize_names: true)
     items = parsed[:data]
@@ -124,6 +123,4 @@ describe "Items API" do
       expect(item[:attributes][:name]).to_not eq(item_4.name)
     end
   end
-
-
 end

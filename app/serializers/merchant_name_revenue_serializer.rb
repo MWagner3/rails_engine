@@ -1,9 +1,8 @@
+# frozen_string_literal: true
+
 class MerchantNameRevenueSerializer
   include JSONAPI::Serializer
   attributes :name
 
-  attribute :revenue do |object|
-    object.total_revenue
-  end
-
+  attribute :revenue, &:total_revenue
 end
